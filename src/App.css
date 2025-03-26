@@ -1,38 +1,576 @@
-.App {
-  text-align: center;
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: "Lora", serif;
+  background-color: white;
+  color: #333;
+  overflow: hidden; /* Importante: evitar scroll en body */
+  width: 100%;
+  max-width: 100vw; /* Importante: evita overflow horizontal */
+  height: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html {
+  height: 100%;
+  overflow: hidden; /* Prevenir scroll en toda la página */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Contenedor principal */
+.app-container {
+  display: flex;
+  height: 100vh;
+  background-color: #ffffff;
+  position: relative;
+  overflow: hidden; /* Prevenir overflow */
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Panel izquierdo */
+.left-panel-container {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Alinea hacia la derecha en vez de center */
+  padding: 3rem 1.5rem 3rem 3rem; /* Menos padding a la derecha */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden; /* Prevenir scroll */
+}
+
+/* Panel derecho */
+.right-panel-container {
+  width: 60%;
+  overflow-y: auto; /* Solo este panel puede hacer scroll */
+  padding: 2rem;
+  padding-top: 0; /* Quitar padding superior, lo manejaremos en cada componente */
+  scroll-behavior: auto; /* Cambiado a auto para evitar conflictos con nuestro scroll personalizado */
+  height: 100vh; /* Altura fija */
+  scrollbar-width: thin; /* Scrollbar delgado para Firefox */
+  scrollbar-color: rgba(46, 139, 139, 0.2) transparent; /* Color de scrollbar para Firefox */
+
+  /* Propiedades para scroll más suave */
+  -webkit-overflow-scrolling: touch; /* Para iOS */
+  scroll-padding-top: 20px;
+  scroll-padding-bottom: 20px;
+  will-change: scroll-position; /* Optimización de rendimiento */
+  overscroll-behavior: contain; /* Prevenir scroll encadenado */
+}
+
+/* Estilos para scrollbar (Chrome, Safari, Edge) */
+.right-panel-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.right-panel-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.right-panel-container::-webkit-scrollbar-thumb {
+  background-color: rgba(46, 139, 139, 0.2);
+  border-radius: 20px;
+}
+
+.right-panel-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(46, 139, 139, 0.4);
+}
+
+/* Animaciones generales */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.loaded .fade-in,
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Efecto de hover para el botón */
+.btn-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Tarjetas con efecto hover */
+.card-hover {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Retrasar animaciones secuencialmente */
+.delay-1 {
+  transition-delay: 0.1s;
+}
+.delay-2 {
+  transition-delay: 0.2s;
+}
+.delay-3 {
+  transition-delay: 0.3s;
+}
+
+/* Media queries para dispositivos móviles */
+@media screen and (max-width: 768px) {
+  body,
+  html {
+    overflow-y: auto; /* En móvil sí permitimos scroll en toda la página */
+    height: auto;
+  }
+
+  .app-container {
+    flex-direction: column;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  .left-panel-container {
+    width: 100%;
+    height: auto;
+    min-height: 80vh; /* Reducido para mejor visualización */
+    padding: 1.5rem 0; /* Quitar padding horizontal para centrado */
+    position: relative;
+    justify-content: center; /* Centrado horizontal */
+    box-sizing: border-box; /* Importante: considera el padding en el ancho total */
+  }
+
+  .left-panel {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .left-panel > div {
+    margin-right: 0 !important; /* Quitar margen derecho en móvil */
+  }
+
+  .right-panel-container {
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  /* Ajuste para elementos internos en móvil */
+  .left-panel {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  /* Para que las tarjetas queden más centradas en móvil */
+  .card-container {
+    width: 100% !important;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+  }
+
+  /* Ajuste de la altura de las tarjetas en móvil */
+  .card-container {
+    height: auto !important;
+    min-height: 420px !important;
+  }
+
+  /* Ajustes específicos para el formulario de contacto en móvil */
+  .contact-form-container {
+    width: 85%;
+    padding: 2rem 1.5rem;
+    margin: 0 1rem;
+    box-sizing: border-box;
+  }
+
+  .contact-form-container h2 {
+    font-size: 1.7rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .contact-form-container input {
+    padding: 0.7rem 0.9rem;
+    font-size: 1rem;
+  }
+
+  .contact-form-container button {
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  /* Ajustar la animación del brillo celestial en móvil */
+  .contact-overlay.visible .heavenly-glow {
+    opacity: 0.7;
+    transform: scale(1.5);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Tarjetas con efecto hover - añadido para desktop */
+@media screen and (min-width: 769px) {
+  .card-container {
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out !important;
+    max-height: 600px; /* Aumentar altura máxima para ver todo el contenido */
+  }
+
+  .card-container:hover {
+    transform: translateY(-10px) !important;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Efecto para las imágenes en hover */
+  .card-container:hover img {
+    transform: scale(1.05) !important;
+  }
+
+  /* Ajuste de espaciado para la sección derecha en desktop */
+  .right-panel-container {
+    padding-top: 1rem;
+    padding-bottom: 0;
+  }
+
+  /* Animación más suave para las tarjetas al hacer scroll */
+  .fade-in.visible {
+    transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1),
+      transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  /* Mejora de animación al hacer hover */
+  .card-container {
+    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+      box-shadow 0.5s cubic-bezier(0.19, 1, 0.22, 1) !important;
+  }
+
+  /* Arreglar espaciado interno */
+  .card-container > div:last-child {
+    padding-bottom: 2rem;
+    height: auto;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important; /* Evitar que se corte el contenido */
+  }
+
+  /* Ajuste específico para la etiqueta de "Feature" */
+  .feature-tag {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 0.5rem;
+    margin-top: auto; /* Para posicionarlo al final del contenedor */
+    display: inline-block;
+  }
+}
+
+/* Estilos para la animación de contacto */
+.contact-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f5c518;
+  z-index: 10000; /* Z-index más alto para cubrir todo */
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 2.5s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 2.5s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  overflow: hidden;
 }
 
-.App-link {
-  color: #61dafb;
+.contact-overlay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 0, 0.8) 0%,
+    rgba(245, 197, 24, 0) 70%
+  );
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 3s ease-out, transform 3s ease-out;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.contact-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+.contact-overlay.visible::before {
+  opacity: 0.9;
+  transform: scale(2);
+}
+
+.contact-form-container {
+  background-color: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(80px) scale(0.8);
+  opacity: 0;
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s,
+    opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  z-index: 10001; /* Asegurar que está por encima del overlay */
+}
+
+.contact-overlay.visible .contact-form-container {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.contact-form-container h2 {
+  margin-bottom: 1.5rem;
+  color: #2e8b8b;
+  background: linear-gradient(135deg, #2e8b8b 0%, #43b0b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2rem;
+}
+
+/* Modificaciones específicas para la animación del input */
+.contact-form-container input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+  font-family: "Lora", serif;
+
+  /* Nueva animación para el input */
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1s,
+    opacity 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1s, border-color 0.3s ease,
+    box-shadow 0.3s ease, background-color 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.contact-overlay.visible .contact-form-container input {
+  transform: translateY(0);
+  opacity: 1;
+  box-shadow: 0 0 15px rgba(245, 197, 24, 0.3);
+  animation: golden-pulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes golden-pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(245, 197, 24, 0.2);
+    border-color: rgba(245, 197, 24, 0.4);
   }
-  to {
-    transform: rotate(360deg);
+  100% {
+    box-shadow: 0 0 15px rgba(245, 197, 24, 0.4);
+    border-color: rgba(245, 197, 24, 0.8);
+  }
+}
+
+.contact-form-container input:focus {
+  outline: none;
+  border-color: #f5c518;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.3);
+  animation: none;
+}
+
+.contact-form-container button {
+  background-color: #2e8b8b;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 8px rgba(46, 139, 139, 0.2);
+}
+
+.contact-form-container button:hover {
+  transform: translateY(-3px);
+  background-color: #3aa0a0;
+  box-shadow: 0 6px 12px rgba(46, 139, 139, 0.3);
+}
+
+/* Para la animación de brillo celestial */
+.heavenly-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(245, 197, 24, 0) 70%
+  );
+  opacity: 0;
+  transition: opacity 2.5s ease-in-out, transform 2.5s ease-in-out;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
+.contact-overlay.visible .heavenly-glow {
+  opacity: 0.8;
+  animation: epic-pulse-glow 6s infinite alternate;
+  transform: scale(1.2);
+}
+
+@keyframes epic-pulse-glow {
+  0% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+/* Añadir más efectos visuales para la transición */
+.light-rays {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(255, 215, 0, 0) 0deg,
+    rgba(255, 215, 0, 0.1) 20deg,
+    rgba(255, 215, 0, 0) 40deg,
+    rgba(255, 215, 0, 0.1) 60deg,
+    rgba(255, 215, 0, 0) 80deg,
+    rgba(255, 215, 0, 0.1) 100deg,
+    rgba(255, 215, 0, 0) 120deg,
+    rgba(255, 215, 0, 0.1) 140deg,
+    rgba(255, 215, 0, 0) 160deg,
+    rgba(255, 215, 0, 0.1) 180deg,
+    rgba(255, 215, 0, 0) 200deg,
+    rgba(255, 215, 0, 0.1) 220deg,
+    rgba(255, 215, 0, 0) 240deg,
+    rgba(255, 215, 0, 0.1) 260deg,
+    rgba(255, 215, 0, 0) 280deg,
+    rgba(255, 215, 0, 0.1) 300deg,
+    rgba(255, 215, 0, 0) 320deg,
+    rgba(255, 215, 0, 0.1) 340deg,
+    rgba(255, 215, 0, 0) 360deg
+  );
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  animation: rotate-rays 60s linear infinite;
+}
+
+.contact-overlay.visible .light-rays {
+  opacity: 0.7;
+}
+
+@keyframes rotate-rays {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Animación de carga para el botón de enviar */
+.sending-animation {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 13px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+}
+
+.sending-animation.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sending-animation div {
+  position: absolute;
+  top: 0;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #2e8b8b;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.sending-animation div:nth-child(1) {
+  left: 8px;
+  animation: sending-animation1 0.6s infinite;
+}
+
+.sending-animation div:nth-child(2) {
+  left: 8px;
+  animation: sending-animation2 0.6s infinite;
+}
+
+.sending-animation div:nth-child(3) {
+  left: 32px;
+  animation: sending-animation2 0.6s infinite;
+}
+
+.sending-animation div:nth-child(4) {
+  left: 56px;
+  animation: sending-animation3 0.6s infinite;
+}
+
+@keyframes sending-animation1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes sending-animation2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+@keyframes sending-animation3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
   }
 }
