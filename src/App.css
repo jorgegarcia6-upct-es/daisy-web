@@ -134,8 +134,8 @@ html {
   html {
     overflow-y: auto; /* En móvil sí permitimos scroll en toda la página */
     height: auto;
-    scroll-behavior: auto;
-    scroll-padding-top: 0; /* Reset scroll padding */
+    scroll-behavior: smooth; /* Cambiado a smooth para mejorar experiencia */
+    overscroll-behavior: none; /* Previene el efecto de "rebote" en algunos navegadores */
   }
 
   .app-container {
@@ -147,6 +147,7 @@ html {
     position: absolute;
     top: 0;
     left: 0;
+    overscroll-behavior: none; /* Previene el comportamiento de overscroll */
   }
 
   .left-panel-container {
