@@ -356,6 +356,8 @@ export default function LeftPanel() {
               fontSize: "1.1rem",
               marginTop: "0.8rem",
               boxShadow: "0 4px 8px rgba(245, 197, 24, 0.2)",
+              color: "#000", // Explicitly set text color to black
+              WebkitTextFillColor: "#000", // Fix for iOS Safari
             }}
             onClick={handleContactClick}
           >

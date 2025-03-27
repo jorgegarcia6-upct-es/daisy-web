@@ -8,12 +8,17 @@ function App() {
     // Añadir clase para activar animaciones cuando la página está cargada
     document.body.classList.add("loaded");
 
+    // Scroll to top on page load, especially important for mobile
+    window.scrollTo(0, 0);
+
     // Prevenir scroll en body en desktop
     const handleResize = () => {
       if (window.innerWidth > 768) {
         document.body.style.overflow = "hidden";
       } else {
         document.body.style.overflow = "auto";
+        // Ensure we're at the top when switching to mobile
+        window.scrollTo(0, 0);
       }
     };
 
